@@ -23,13 +23,13 @@ export class Board extends QReact.Component {
 					<p>Limit of tasks per day: {this.state.limit}</p>
 					<button
 						onClick={() => this.setState({ ...this.state, limit: this.state.limit + 1 })}>
-						Increment
+						Increase
 					</button>
 					&nbsp;
 					<button
 						disabled={this.state.limit === 0}
 						onClick={() => this.setState({ ...this.state, limit: this.state.limit - 1 })}>
-						Decrement
+						Decrease
 					</button>
 				</div>
 				<div style={{ overflow: 'hidden', padding: '10px 0' }}>
