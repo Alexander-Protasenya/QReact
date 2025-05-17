@@ -1,0 +1,21 @@
+{
+	"name": "qreact",
+	"version": "0.8.1",
+	"private": true,
+	"scripts": {
+        "lint": "eslint .",
+		"build": "webpack --config webpack.build.js --mode production",
+		"demopublish": "webpack --config webpack.demopublish.js --mode production",
+		"demostart": "webpack-dev-server --config webpack.demostart.js --mode development"
+	},
+	"devDependencies": {
+		"@babel/core": "7.27.1",
+		"@babel/plugin-transform-react-jsx": "7.27.1",
+		"babel-loader": "10.0.0",
+		"eslint": "9.27.0",
+		"html-webpack-plugin": "5.6.3",
+		"webpack": "5.99.0",
+		"webpack-cli": "6.0.1",
+		"webpack-dev-server": "5.2.1"
+	}
+}
