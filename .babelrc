@@ -1,0 +1,14 @@
+{
+	"plugins": [
+		[
+			"@babel/plugin-transform-react-jsx",
+			{
+				// "pragma": "QReact.createElement"
+				"pragma": "QReact.q", // Short form "QReact.createElement"
+				"useSpread": true,
+				"useBuiltIns": false
+				// "pragmaFrag": "React.Fragment"
+			}
+		]
+	]
+}
