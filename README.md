@@ -15,7 +15,7 @@ You can use it as educational project. Code is as simple as possible, has commen
 8) Only "strict mode".
 
 ## How does it work?
-First of all, [babel](https://babeljs.io/docs/babel-plugin-transform-react-jsx) transforms JSX code to JavaScript. All JSX nodes converts into JavaScript calls of "createElement" function (name of this function is configurable, but main point is that function has strict signature).
+First of all, [babel](https://babeljs.io/docs/babel-plugin-transform-react-jsx) transforms JSX code to JavaScript. All JSX nodes converts into JavaScript calls of "createElement" function (name of this function is configurable, but main point is that function has strict predefined signature).
 This transformation is NOT part of application. It is part of bundle generation. It means that the published web application should not have reference to [babel](https://babeljs.io/docs/babel-plugin-transform-react-jsx).
 So, to implement any reactive library based on JSX, you need to configure [babel](https://babeljs.io/docs/babel-plugin-transform-react-jsx), and implement "createElement" function. This function creates virtual shadow DOM hierarchy.
 The final step: library should provide ways to update shadow/real DOM.
