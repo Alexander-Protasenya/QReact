@@ -43,7 +43,7 @@ npm install
 npm run demostart
 ```
 
-3. Open "http://localhost:3000/" in your browser
+3. Open http://localhost:3000/ in your browser
 
 if you need build library only
 
