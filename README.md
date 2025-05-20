@@ -4,6 +4,19 @@ It is NOT an alternative of [React](https://react.dev/) library (not for product
 
 You can use it as educational project. Code is as simple as possible, has comments, less than 350 lines of code. It is one of the smallest reactive JS libraries.
 
+## API
+Inside QReact.Component, you can use:
+
+* this.state
+* this.props
+* this.render()
+* this.componentDidMount()
+* this.componentWillUnmount()
+* this.setState(nextState, callback)
+* this.shouldComponentUpdate(nextProps, nextState)
+
+All of them have behavior the same as provided in React 18.
+
 ## Technical goals
 1) No references to other packages.
 2) No global variables (no usage of "window" object).
