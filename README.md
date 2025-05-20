@@ -1,6 +1,5 @@
-![QReact](https://github.com/Alexander-Protasenya/QReact/blob/main/logo.png)
-
-<!-- # QReact – lightweight reactive JavaScript library -->
+<!-- ![QReact](https://github.com/Alexander-Protasenya/QReact/blob/main/logo.png) -->
+# QReact – lightweight reactive JavaScript library
 
 It is NOT an alternative of [React](https://react.dev/) library (not for production use). This project is a challenge. First of all, it is attempt to deeply understand concepts of [React](https://react.dev/) & JSX. Also, I wanted to check, if I can implement this or not)
 
