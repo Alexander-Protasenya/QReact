@@ -25,9 +25,9 @@ Inside QReact.Component, you can use:
 * this.setState(nextState, callback)
 * this.shouldComponentUpdate(nextProps, nextState)
 
-You can use "Functional components" too, but without hooks.
-
 All of them have behavior the same as provided in React 18.2.0.
+
+You can use "Functional components" too, but without hooks.
 
 ## How does it work?
 First of all, [babel](https://babeljs.io/docs/babel-plugin-transform-react-jsx) transforms JSX code to JavaScript. All JSX nodes converts into JavaScript calls of "createElement" function (name of this function is configurable, but main point is that function has predefined signature).
