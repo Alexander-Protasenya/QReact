@@ -229,6 +229,10 @@ function normalizeVnode(src) {
 	return { text: src.toString() };
 }
 
+function getFullProps(props, children) {
+	return (children.length) ? {...props, children } : props;
+}
+
 /**
  * Creates a new QReact element. This function is typically used to create elements for rendering.
  *
@@ -248,13 +252,17 @@ function normalizeVnode(src) {
  */
 function createElement(src, props, ...children) {
 	if (src.prototype) { // Class component
-		const instance = new src(props || {});
+		const fullProps = getFullProps(props, children);
+		const instance = new src(fullProps);
 		const vnode = instance.render();
 
 		vnode.instance = instance;
 		instance.vnode = vnode;
 
 		return vnode;
+	} else if (typeof src === 'function') { // Pure function
+		const fullProps = getFullProps(props, children);
+		return src(fullProps);
 	}
 
 	const attributes = {};
@@ -317,8 +325,8 @@ class Component {
 	*/
 	setState(nextState, callback, nextProps = this.props) {
 
-		const isPrevent = this.shouldComponentUpdate && !this.shouldComponentUpdate(nextProps, nextState);
-		if (isPrevent) {
+		const noUpdate = this.shouldComponentUpdate && !this.shouldComponentUpdate(nextProps, nextState);
+		if (noUpdate) {
 			return;
 		}
 
