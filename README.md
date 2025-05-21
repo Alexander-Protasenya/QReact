@@ -2,7 +2,7 @@
 
 It is NOT an alternative of [React](https://react.dev/) library (not for production use). This project is a challenge. First of all, it is attempt to deeply understand concepts of [React](https://react.dev/) & JSX. Also, I wanted to check, if I can implement this or not)
 
-You can use it as educational project. Code is as simple as possible, has comments, less than 350 lines of code. It is one of the smallest reactive JS libraries.
+You can use it as educational project. Code is as simple as possible, has comments, less than 400 lines of code. It is one of the smallest reactive JS libraries.
 
 ## Technical goals
 * No references to other packages.
@@ -24,6 +24,8 @@ Inside QReact.Component, you can use:
 * this.componentWillUnmount()
 * this.setState(nextState, callback)
 * this.shouldComponentUpdate(nextProps, nextState)
+
+You can use "pure functions" too, but without hooks.
 
 All of them have behavior the same as provided in React 18.2.0.
 
