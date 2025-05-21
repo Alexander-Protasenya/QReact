@@ -25,7 +25,7 @@ Inside QReact.Component, you can use:
 * this.setState(nextState, callback)
 * this.shouldComponentUpdate(nextProps, nextState)
 
-You can use "pure functions" too, but without hooks.
+You can use "Functional components" too, but without hooks.
 
 All of them have behavior the same as provided in React 18.2.0.
 
