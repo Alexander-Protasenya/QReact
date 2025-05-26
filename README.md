@@ -27,7 +27,7 @@ Inside QReact.Component, you can use:
 
 All of them have behavior the same as provided in React 18.2.0.
 
-You can use "Function components" too, but without hooks & state.
+You can use "Function components" too, but without hooks & state. So, "Function components" are recommended only for primitive functionality.
 
 ## How does it work?
 First of all, [babel](https://babeljs.io/docs/babel-plugin-transform-react-jsx) transforms JSX code to JavaScript. All JSX nodes converts into JavaScript calls of "createElement" function (name of this function is configurable, but main point is that function has predefined signature).
