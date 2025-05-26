@@ -11,7 +11,7 @@ const html = {
 	},
 
 	insertElement(parentElement, element, index) {
-		if (index !== undefined) {
+		if (index !== undefined) { // Checking like: 'if (index)' is not correct for this case, because 0 is valid value
 			parentElement.insertBefore(element, parentElement.children[index]);
 		} else {
 			parentElement.appendChild(element);
@@ -260,7 +260,7 @@ function createElement(src, props, ...children) {
 		instance.vnode = vnode;
 
 		return vnode;
-	} else if (typeof src === 'function') { // Pure function
+	} else if (typeof src === 'function') { // Function component
 		const fullProps = getFullProps(props, children);
 		return src(fullProps);
 	}
