@@ -67,9 +67,9 @@ npm run build
 ```
 
 ## Roadmap
+* Add more examples of using (ideally, example per feature).
 * Add support of "<>" (short form of "React.Fragment").
 * Add support of propTypes validation by using [prop-types](https://www.npmjs.com/package/prop-types) package.
 * Add support of [Higher-Order Components (HOC)](https://legacy.reactjs.org/docs/higher-order-components.html). Looks like, it should not be part of this library, possible it can work "out of the box", but it has not been tested.
-* Add more examples of using (ideally, example per feature).
 
 P.S. Currently, "Class component" approach, propTypes validation & using JavaScript (instead of TypeScript) are kind of deprecated technologies. However, many systems still use them. There is a small chance that this library will replaces [React](https://react.dev/) for some these systems. Of course, if I have time and motivation to maintain it)
