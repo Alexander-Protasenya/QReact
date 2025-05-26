@@ -20,6 +20,7 @@ export class Column extends QReact.Component {
 
 	render() {
 		return (
+			// Example of processing inline CSS styles
 			<div style={{ float: 'left', padding: '0 20px', border: 'solid 1px lightgray', margin: '10px 10px 0px 0px' }}>
 				<div>
 					<p>
