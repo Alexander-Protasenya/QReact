@@ -17,8 +17,8 @@ You can use it as educational project. Code is as simple as possible, has commen
 ## API
 Inside QReact.Component, you can use:
 
-* this.state
 * this.props
+* this.state
 * this.render()
 * this.componentDidMount()
 * this.componentWillUnmount()
@@ -27,7 +27,7 @@ Inside QReact.Component, you can use:
 
 All of them have behavior the same as provided in React 18.2.0.
 
-You can use "Functional components" too, but without hooks.
+You can use "Function components" too, but without hooks & state.
 
 ## How does it work?
 First of all, [babel](https://babeljs.io/docs/babel-plugin-transform-react-jsx) transforms JSX code to JavaScript. All JSX nodes converts into JavaScript calls of "createElement" function (name of this function is configurable, but main point is that function has predefined signature).
@@ -70,5 +70,6 @@ npm run build
 * Add support of "<>" (short form of "React.Fragment").
 * Add support of propTypes validation by using [prop-types](https://www.npmjs.com/package/prop-types) package.
 * Add support of [Higher-Order Components (HOC)](https://legacy.reactjs.org/docs/higher-order-components.html). Looks like, it should not be part of this library, possible it can work "out of the box", but it has not been tested.
+* Add more examples of using (ideally, example per feature).
 
 P.S. Currently, "Class component" approach, propTypes validation & using JavaScript (instead of TypeScript) are kind of deprecated technologies. However, many systems still use them. There is a small chance that this library will replaces [React](https://react.dev/) for some these systems. Of course, if I have time and motivation to maintain it)
