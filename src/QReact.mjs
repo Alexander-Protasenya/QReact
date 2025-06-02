@@ -141,15 +141,15 @@ function updateChildNodes(oldVnode, newVnode) {
 
 	const pairs = [];
 
-	for (let index = 0; index < newVnode.childNodes.length; index++) {
-		const newChildVnode = newVnode.childNodes[index];
+	for (let i = 0; i < newVnode.childNodes.length; i++) {
+		const newChildVnode = newVnode.childNodes[i];
 		const key = (newChildVnode.attributes) ? newChildVnode.attributes.key : null;
 
 		let oldChildVnode;
 		if (key) {
 			oldChildVnode = oldVnode.childNodes.find(x => x.attributes && x.attributes.key === key);
 		} else {
-			oldChildVnode = oldVnode.childNodes[index];
+			oldChildVnode = oldVnode.childNodes[i];
 		}
 
 		pairs.push({ oldChildVnode, newChildVnode });
@@ -216,17 +216,17 @@ function unmountChildNodes(vnode) { // Recursively
 	}
 }
 
-function normalizeVnode(src) {
-	if (src.tagName) {
-		return src;
+function normalizeVnode(vnode) {
+	if (vnode.tagName) {
+		return vnode;
 	}
 
-	const type = typeof src;
-	if (type === 'string' || type === 'number') {
-		return { text: src };
+	const type = typeof vnode;
+	if (type === 'string') {
+		return { text: vnode };
 	}
 
-	return { text: src.toString() };
+	return { text: vnode.toString() };
 }
 
 function getFullProps(props, children) {
@@ -277,13 +277,10 @@ function createElement(src, props, ...children) {
 		}
 	}
 
-	const allChildren = children.flat();
-	const childNodes = [];
-	for (const child of allChildren) {
-		if (child || child === 0) {
-			childNodes.push(normalizeVnode(child));
-		}
-	}
+	const childNodes = children
+		.flat()
+		.filter(x => x || x === 0 || x === false) // Values '0' and 'false' are valid, system should not ignore them
+		.map(x => normalizeVnode(x));
 
 	return {
 		tagName: src,
