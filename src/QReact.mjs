@@ -103,7 +103,7 @@ function fillDomElement(vnode, instances) {
 	return vnode.domElement;
 }
 
-function update(oldVnode, newVnode) {
+function update(oldVnode, newVnode) { // Recursively
 
 	if (oldVnode.instance) {
 		if (oldVnode.instance.props !== newVnode.instance.props) {
@@ -114,7 +114,30 @@ function update(oldVnode, newVnode) {
 
 	if ((oldVnode.tagName) && (oldVnode.tagName === newVnode.tagName)) {
 		updateAttributes(oldVnode, newVnode);
-		updateChildNodes(oldVnode, newVnode);
+
+		const pairs = getPairs(oldVnode.childNodes, newVnode.childNodes);
+		for (let i = 0; i < pairs.length; i++) {
+			const pair = pairs[i];
+			if (pair.oldChildVnode && pair.newChildVnode) { // Both, oldChildVnode & newChildVnode exist
+				update(pair.oldChildVnode, pair.newChildVnode);
+			} else if (pair.oldChildVnode) { // Only oldChildVnode exists
+				const index = oldVnode.childNodes.indexOf(pair.oldChildVnode);
+				oldVnode.childNodes.splice(index, 1);
+				unmountChildNodes(pair.oldChildVnode);
+				html.removeElement(pair.oldChildVnode.domElement);
+			} else if (pair.newChildVnode) { // Only newChildVnode exists
+				const instances = [];
+				const newChildElement = fillDomElement(pair.newChildVnode, instances);
+				html.insertElement(oldVnode.domElement, newChildElement, i);
+				for (const instance of instances) {
+					if (instance.componentDidMount) {
+						instance.componentDidMount();
+					}
+				}
+
+				oldVnode.childNodes.push(pair.newChildVnode);
+			}
+		}
 	} else if ((oldVnode.text !== undefined) && (newVnode.text !== undefined)) {
 		if (oldVnode.text !== newVnode.text) {
 			html.setText(oldVnode.domElement, newVnode.text);
@@ -137,52 +160,26 @@ function update(oldVnode, newVnode) {
 	}
 }
 
-function updateChildNodes(oldVnode, newVnode) {
-
+function getPairs(oldVnodes, newVnodes) {
 	const pairs = [];
+	const set = new Set();
 
-	for (let i = 0; i < newVnode.childNodes.length; i++) {
-		const newChildVnode = newVnode.childNodes[i];
-		const key = newChildVnode.attributes?.key;
+	for (let i = 0; i < newVnodes.length; i++) {
+		const newVnode = newVnodes[i];
+		const key = newVnode.attributes?.key;
+		const oldVnode = key ? oldVnodes.find(x => x.attributes && x.attributes.key === key) : oldVnodes[i];
+		pairs.push({ oldChildVnode : oldVnode, newChildVnode : newVnode });
 
-		let oldChildVnode;
-		if (key) {
-			oldChildVnode = oldVnode.childNodes.find(x => x.attributes && x.attributes.key === key);
-		} else {
-			oldChildVnode = oldVnode.childNodes[i];
-		}
-
-		pairs.push({ oldChildVnode, newChildVnode });
-	}
-
-	for (const child of oldVnode.childNodes) {
-		if (!pairs.some(x => x.oldChildVnode === child)) {
-			pairs.push({ oldChildVnode: child });
+		if (oldVnode) {
+			set.add(oldVnode);
 		}
 	}
 
-	oldVnode.childNodes = [];
-	for (const pair of pairs) {
-		if (pair.oldChildVnode && pair.newChildVnode) { // Both, oldChildVnode & newChildVnode exist
-			update(pair.oldChildVnode, pair.newChildVnode);
-			oldVnode.childNodes.push(pair.oldChildVnode);
-		} else if (pair.oldChildVnode) { // Only oldChildVnode exists
-			unmountChildNodes(pair.oldChildVnode);
-			html.removeElement(pair.oldChildVnode.domElement);
-		} else if (pair.newChildVnode) { // Only newChildVnode exists
-			const instances = [];
-			const newChildElement = fillDomElement(pair.newChildVnode, instances);
-			html.insertElement(oldVnode.domElement, newChildElement, oldVnode.childNodes.length);
-
-			for (const instance of instances) {
-				if (instance.componentDidMount) {
-					instance.componentDidMount();
-				}
-			}
-
-			oldVnode.childNodes.push(pair.newChildVnode);
-		}
+	if (set.size < oldVnodes.length) {
+		pairs.push(...oldVnodes.filter(x => !set.has(x)).map(x => ({ oldChildVnode: x })));
 	}
+
+	return pairs;
 }
 
 function updateAttributes(oldVnode, newVnode) {
@@ -217,16 +214,7 @@ function unmountChildNodes(vnode) { // Recursively
 }
 
 function normalizeVnode(vnode) {
-	if (vnode.tagName) {
-		return vnode;
-	}
-
-	const type = typeof vnode;
-	if (type === 'string') {
-		return { text: vnode };
-	}
-
-	return { text: vnode.toString() };
+	return (vnode.tagName) ? vnode : { text: vnode };
 }
 
 function getFullProps(props, children) {
