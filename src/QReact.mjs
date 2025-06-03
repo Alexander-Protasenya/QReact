@@ -11,7 +11,7 @@ const html = {
 	},
 
 	insertElement(parentElement, element, index) {
-		if (index !== undefined) { // Checking 'if (index)' is not correct for this case, because 0 is valid value
+		if (index !== undefined) { // Checking 'if (index)' is not correct for this case, because '0' is valid value
 			parentElement.insertBefore(element, parentElement.children[index]);
 		} else {
 			parentElement.appendChild(element);
@@ -33,7 +33,7 @@ const html = {
 	setAttribute(element, attrName, attrValue) {
 
 		// Special case 0: Experimental
-		if ((attrValue === undefined) || (attrValue === null)) { // "false", "0", "empty string" are valid
+		if ((attrValue === undefined) || (attrValue === null)) { // 'false', '0', 'empty string' are valid
 			element.removeAttribute(attrName);
 			return;
 		}
