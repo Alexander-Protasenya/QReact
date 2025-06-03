@@ -143,7 +143,7 @@ function updateChildNodes(oldVnode, newVnode) {
 
 	for (let i = 0; i < newVnode.childNodes.length; i++) {
 		const newChildVnode = newVnode.childNodes[i];
-		const key = (newChildVnode.attributes) ? newChildVnode.attributes.key : null;
+		const key = newChildVnode.attributes?.key;
 
 		let oldChildVnode;
 		if (key) {
@@ -279,7 +279,7 @@ function createElement(src, props, ...children) {
 
 	const childNodes = children
 		.flat()
-		.filter(x => x || x === 0 || x === false) // Values '0' and 'false' are valid, system should not ignore them
+		.filter(x => x !== null && x !== undefined && x !== '') // Values '0' and 'false' are valid, system should not ignore them
 		.map(x => normalizeVnode(x));
 
 	return {
