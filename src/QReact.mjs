@@ -76,6 +76,11 @@ const html = {
 	},
 };
 
+Array.prototype.removeValue = function (value) {
+  	const index = this.indexOf(value);
+	this.splice(index, 1);
+};
+
 function fillDomElement(vnode, instances) {
 
 	if (vnode.tagName) {
@@ -115,29 +120,25 @@ function update(oldVnode, newVnode) { // Recursively
 	if ((oldVnode.tagName) && (oldVnode.tagName === newVnode.tagName)) {
 		updateAttributes(oldVnode, newVnode);
 
-		const pairs = getPairs(oldVnode.childNodes, newVnode.childNodes);
-		for (let i = 0; i < pairs.length; i++) {
-			const pair = pairs[i];
-			if (pair.oldChildVnode && pair.newChildVnode) { // Both, oldChildVnode & newChildVnode exist
-				update(pair.oldChildVnode, pair.newChildVnode);
-			} else if (pair.oldChildVnode) { // Only oldChildVnode exists
-				const index = oldVnode.childNodes.indexOf(pair.oldChildVnode);
-				oldVnode.childNodes.splice(index, 1);
-				unmountChildNodes(pair.oldChildVnode);
-				html.removeElement(pair.oldChildVnode.domElement);
-			} else if (pair.newChildVnode) { // Only newChildVnode exists
-				const instances = [];
-				const newChildElement = fillDomElement(pair.newChildVnode, instances);
-				html.insertElement(oldVnode.domElement, newChildElement, i);
-				for (const instance of instances) {
-					if (instance.componentDidMount) {
-						instance.componentDidMount();
-					}
+		if (oldVnode.childNodes.length && newVnode.childNodes.length) {
+			const pairs = getPairs(oldVnode.childNodes, newVnode.childNodes);
+			pairs.forEach((pair, index) => {
+				if (pair.oldVnode && pair.newVnode) { // Both, old Vnode & new Vnode exist
+					update(pair.oldVnode, pair.newVnode);
+				} else if (pair.oldVnode) { // Only old Vnode exists
+					oldVnode.childNodes.removeValue(pair.oldVnode);
+					unmountComponents(pair.oldVnode);
+					html.removeElement(pair.oldVnode.domElement);
+				} else if (pair.newVnode) { // Only new Vnode exists
+					const instances = [];
+					const newChildElement = fillDomElement(pair.newVnode, instances);
+					html.insertElement(oldVnode.domElement, newChildElement, index);
+					mountComponents(instances);
+					oldVnode.childNodes.push(pair.newVnode);
 				}
-
-				oldVnode.childNodes.push(pair.newChildVnode);
-			}
+			});
 		}
+
 	} else if ((oldVnode.text !== undefined) && (newVnode.text !== undefined)) {
 		if (oldVnode.text !== newVnode.text) {
 			html.setText(oldVnode.domElement, newVnode.text);
@@ -147,16 +148,9 @@ function update(oldVnode, newVnode) { // Recursively
 		const oldElement = oldVnode.domElement;
 		const instances = [];
 		const newElement = fillDomElement(newVnode, instances);
-
-		unmountChildNodes(oldVnode);
-
+		unmountComponents(oldVnode);
 		html.replaceElement(oldElement, newElement);
-
-		for (const instance of instances) {
-			if (instance.componentDidMount) {
-				instance.componentDidMount();
-			}
-		}
+		mountComponents(instances);
 	}
 }
 
@@ -168,7 +162,7 @@ function getPairs(oldVnodes, newVnodes) {
 		const newVnode = newVnodes[i];
 		const key = newVnode.attributes?.key;
 		const oldVnode = key ? oldVnodes.find(x => x.attributes && x.attributes.key === key) : oldVnodes[i];
-		pairs.push({ oldChildVnode : oldVnode, newChildVnode : newVnode });
+		pairs.push({ oldVnode, newVnode });
 
 		if (oldVnode) {
 			set.add(oldVnode);
@@ -176,7 +170,7 @@ function getPairs(oldVnodes, newVnodes) {
 	}
 
 	if (set.size < oldVnodes.length) {
-		pairs.push(...oldVnodes.filter(x => !set.has(x)).map(x => ({ oldChildVnode: x })));
+		pairs.push(...oldVnodes.filter(x => !set.has(x)).map(x => ({ oldVnode: x })));
 	}
 
 	return pairs;
@@ -201,15 +195,23 @@ function updateAttributes(oldVnode, newVnode) {
 	oldVnode.attributes = newVnode.attributes;
 }
 
-function unmountChildNodes(vnode) { // Recursively
+function unmountComponents(vnode) { // Recursively
 	if (vnode.childNodes) {
 		for (const child of vnode.childNodes) {
-			unmountChildNodes(child);
+			unmountComponents(child);
 		}
 	}
 
 	if (vnode.instance && vnode.instance.componentWillUnmount) {
 		vnode.instance.componentWillUnmount();
+	}
+}
+
+function mountComponents(instances) {
+	for (const instance of instances) {
+		if (instance.componentDidMount) {
+			instance.componentDidMount();
+		}
 	}
 }
 
