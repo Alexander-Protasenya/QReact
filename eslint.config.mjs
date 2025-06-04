@@ -2,6 +2,9 @@ export default [
 	{
 		languageOptions: {
 			globals: {
+				__dirname: 'readonly',
+				module: 'readonly',
+				require: 'readonly',
 				document: 'readonly',
 			},
 		},
