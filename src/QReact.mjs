@@ -77,7 +77,7 @@ const html = {
 };
 
 Array.prototype.removeValue = function (value) {
-  	const index = this.indexOf(value);
+	const index = this.indexOf(value);
 	this.splice(index, 1);
 };
 
@@ -95,7 +95,7 @@ function fillDomElement(vnode, instances) {
 		}
 
 		for (const eventKey in vnode.events) {
-			vnode.domElement.addEventListener(eventKey, (event) => vnode.events[event.type].call(vnode, event), false);
+			vnode.domElement.addEventListener(eventKey, event => vnode.events[event.type].call(vnode, event), false);
 		}
 	} else { // Text element
 		vnode.domElement = html.createTextElement(vnode.text);
@@ -109,7 +109,6 @@ function fillDomElement(vnode, instances) {
 }
 
 function update(oldVnode, newVnode) { // Recursively
-
 	if (oldVnode.instance) {
 		if (oldVnode.instance.props !== newVnode.instance.props) {
 			oldVnode.instance.setState(oldVnode.instance.state, null, newVnode.instance.props);
@@ -220,7 +219,7 @@ function normalizeVnode(vnode) {
 }
 
 function getFullProps(props, children) {
-	return (children.length) ? {...props, children } : props;
+	return (children.length) ? { ...props, children } : props;
 }
 
 /**
@@ -250,7 +249,9 @@ function createElement(src, props, ...children) {
 		instance.vnode = vnode;
 
 		return vnode;
-	} else if (typeof src === 'function') { // Function component
+	}
+
+	if (typeof src === 'function') { // Function component
 		const fullProps = getFullProps(props, children);
 		return src(fullProps);
 	}
