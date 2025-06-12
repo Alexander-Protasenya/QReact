@@ -153,6 +153,7 @@ function update(oldVnode, newVnode) { // Recursively
 	}
 }
 
+// "Greedy Algorithm" of searching same/similar virtual nodes from old & new versions
 function getPairs(oldVnodes, newVnodes) {
 	const pairs = [];
 	const set = new Set();
