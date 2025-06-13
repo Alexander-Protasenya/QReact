@@ -6,6 +6,11 @@ export default [
 				module: 'readonly',
 				require: 'readonly',
 				document: 'readonly',
+				window: 'readonly',
+				console: 'readonly',
+				URLSearchParams: 'readonly',
+				history: 'readonly',
+				alert: 'readonly',
 			},
 		},
 		rules: {
