@@ -1,6 +1,6 @@
 ﻿{
 	"name": "qreact",
-	"version": "0.8.1",
+	"version": "0.8.2",
 	"private": true,
 	"scripts": {
         "lint": "eslint .",

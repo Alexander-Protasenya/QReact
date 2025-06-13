@@ -1,4 +1,4 @@
-// Functions for updating DOM
+﻿// Functions for updating DOM
 const html = {
 	htmlBooleanAttributes: ['autocomplete', 'checked', 'disabled', 'readonly', 'required', 'autofocus'],
 
@@ -119,7 +119,7 @@ function update(oldVnode, newVnode) { // Recursively
 	if ((oldVnode.tagName) && (oldVnode.tagName === newVnode.tagName)) {
 		updateAttributes(oldVnode, newVnode);
 
-		if (oldVnode.childNodes.length && newVnode.childNodes.length) {
+		if (oldVnode.childNodes.length || newVnode.childNodes.length) {
 			const pairs = getPairs(oldVnode.childNodes, newVnode.childNodes);
 			pairs.forEach((pair, index) => {
 				if (pair.oldVnode && pair.newVnode) { // Both, old Vnode & new Vnode exist
@@ -340,5 +340,5 @@ export const QReact = {
 	createElement,
 	q: createElement, // Short form for ".babelrc"
 	init,
-	version: '0.8.1',
+	version: '0.8.2',
 };
